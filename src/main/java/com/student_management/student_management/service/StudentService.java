@@ -13,18 +13,18 @@ import java.util.Optional;
 public class StudentService {
 
     @Autowired
-    private static StudentRepository studentRepository;
+    private StudentRepository studentRepository;
 
-    private static final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
-    public static ObjectNode createStudent(JsonNode jsonNode) {
+    public ObjectNode createStudent(JsonNode jsonNode) {
         ObjectNode response = objectMapper.createObjectNode();
         Student student;
 
-        if (jsonNode.has("studentId")) {
-            Integer studentId = jsonNode.get("studentId").asInt();
+        Integer studentId = null;
+        if (jsonNode.has("studentId") && jsonNode.get("studentId") != null) {
+            studentId = jsonNode.get("studentId").asInt();
             Optional<Student> optionalStudent = studentRepository.findById(studentId);
-
             if (optionalStudent.isPresent()) {
                 student = optionalStudent.get();
             } else {
@@ -36,10 +36,19 @@ public class StudentService {
             student = new Student();
         }
 
-        student.setStudentId(jsonNode.get("studentId").asInt());
-        student.setStudentName(jsonNode.get("studentName").asText());
-        student.setStudentEmail(jsonNode.get("studentEmail").asText());
-        student.setStudentPhone(jsonNode.get("studentPhone").asText());
+        // Si studentId est présent, le setter est appelé, sinon ignoré
+        if (jsonNode.has("studentId") && jsonNode.get("studentId") != null) {
+            student.setStudentId(jsonNode.get("studentId").asInt());
+        }
+        if (jsonNode.has("studentName") && jsonNode.get("studentName") != null) {
+            student.setStudentName(jsonNode.get("studentName").asText());
+        }
+        if (jsonNode.has("studentEmail") && jsonNode.get("studentEmail") != null) {
+            student.setStudentEmail(jsonNode.get("studentEmail").asText());
+        }
+        if (jsonNode.has("studentPhone") && jsonNode.get("studentPhone") != null) {
+            student.setStudentPhone(jsonNode.get("studentPhone").asText());
+        }
 
         studentRepository.save(student);
 
