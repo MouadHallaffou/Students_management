@@ -130,4 +130,34 @@ public class StudentService {
         return response;
     }
 
+    public JsonNode updateStudent(Integer studentId, JsonNode jsonNode) {
+        ObjectNode response = objectMapper.createObjectNode();
+
+        Optional<Student> optionalStudent = studentRepository.findById(studentId);
+        if (optionalStudent.isPresent()) {
+            Student student = optionalStudent.get();
+
+            if (jsonNode.has("studentName") && jsonNode.get("studentName") != null) {
+                student.setStudentName(jsonNode.get("studentName").asText());
+            }
+            if (jsonNode.has("studentEmail") && jsonNode.get("studentEmail") != null) {
+                student.setStudentEmail(jsonNode.get("studentEmail").asText());
+            }
+            if (jsonNode.has("studentPhone") && jsonNode.get("studentPhone") != null) {
+                student.setStudentPhone(jsonNode.get("studentPhone").asText());
+            }
+
+            studentRepository.save(student);
+
+            response.put("status", "success");
+            response.put("message", "Student updated successfully");
+            response.put("studentId", student.getStudentId());
+        } else {
+            response.put("status", "error");
+            response.put("message", "Student not found");
+        }
+
+        return response;
+    }
+
 }

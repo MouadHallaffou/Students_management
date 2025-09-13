@@ -30,4 +30,10 @@ public class StudentController {
     public JsonNode deleteStudent(@PathVariable Integer studentId) {
         return studentService.deleteStudent(studentId);
     }
+
+    @PutMapping("/update/{studentId}")
+    public JsonNode updateStudent(@PathVariable Integer studentId, @RequestBody JsonNode jsonNode) {
+        return studentService.updateStudent(studentId, jsonNode);
+    }
+    
 }
