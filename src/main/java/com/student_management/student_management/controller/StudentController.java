@@ -20,4 +20,9 @@ public class StudentController {
     public JsonNode getAllStudents() {
         return studentService.getAllStudents();
     }
+
+    @GetMapping("/{studentId}")
+    public JsonNode getStudentById(@PathVariable Integer studentId) {
+        return studentService.getStudentById(studentId);
+    }
 }

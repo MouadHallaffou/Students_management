@@ -89,4 +89,28 @@ public class StudentService {
 
         return response;
     }
+
+    public JsonNode getStudentById(Integer studentId) {
+        ObjectNode response = objectMapper.createObjectNode();
+
+        Optional<Student> optionalStudent = studentRepository.findById(studentId);
+        if (optionalStudent.isPresent()) {
+            Student student = optionalStudent.get();
+            ObjectNode studentNode = objectMapper.createObjectNode();
+            studentNode.put("studentId", student.getStudentId());
+            studentNode.put("studentName", student.getStudentName());
+            studentNode.put("studentEmail", student.getStudentEmail());
+            studentNode.put("studentPhone", student.getStudentPhone());
+
+            response.put("status", "success");
+            response.put("message", "Student fetched successfully");
+            response.set("student", studentNode);
+        } else {
+            response.put("status", "error");
+            response.put("message", "Student not found");
+        }
+
+        return response;
+    }
+
 }
