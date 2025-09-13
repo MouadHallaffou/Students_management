@@ -2,11 +2,14 @@ package com.student_management.student_management.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.student_management.student_management.model.Student;
 import com.student_management.student_management.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -55,6 +58,34 @@ public class StudentService {
         response.put("status", "success");
         response.put("message", "Student created successfully");
         response.put("studentId", student.getStudentId());
+
+        return response;
+    }
+
+    public JsonNode getAllStudents() {
+        ObjectNode response = objectMapper.createObjectNode();
+
+        List<Student> studentList =  studentRepository.findAll();
+        if (studentList.isEmpty()) {
+            response.put("status", "error");
+            response.put("message", "Student list is empty");
+            return response;
+        }
+
+        ArrayNode arrayNode = objectMapper.createArrayNode();
+        if (studentList != null && !studentList.isEmpty()) {
+            for (Student student : studentList) {
+                ObjectNode studentNode = objectMapper.createObjectNode();
+                studentNode.put("studentId", student.getStudentId());
+                studentNode.put("studentName", student.getStudentName());
+                studentNode.put("studentEmail", student.getStudentEmail());
+                studentNode.put("studentPhone", student.getStudentPhone());
+                arrayNode.add(studentNode);
+            }
+        }
+        response.put("status", "success");
+        response.put("message", "All students fetched successfully");
+        response.set("students", arrayNode);
 
         return response;
     }
