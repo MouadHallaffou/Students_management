@@ -25,4 +25,9 @@ public class StudentController {
     public JsonNode getStudentById(@PathVariable Integer studentId) {
         return studentService.getStudentById(studentId);
     }
+
+    @DeleteMapping("/delete/{studentId}")
+    public JsonNode deleteStudent(@PathVariable Integer studentId) {
+        return studentService.deleteStudent(studentId);
+    }
 }

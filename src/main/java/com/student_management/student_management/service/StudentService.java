@@ -113,4 +113,21 @@ public class StudentService {
         return response;
     }
 
+    public JsonNode deleteStudent(Integer studentId) {
+        ObjectNode response = objectMapper.createObjectNode();
+
+        Optional<Student> optionalStudent = studentRepository.findById(studentId);
+        if (optionalStudent.isPresent()) {
+            Student student = optionalStudent.get();
+            studentRepository.delete(student);
+            response.put("status", "success");
+            response.put("message", "Student " + student.getStudentName() + " deleted successfully");
+        } else {
+            response.put("status", "error");
+            response.put("message", "Student not found");
+        }
+
+        return response;
+    }
+
 }
