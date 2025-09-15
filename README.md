@@ -51,7 +51,7 @@ mvn spring-boot:run
 
 ## 🔌 API Endpoints
 
-- `GET /api/students/all` - 📋 Get all students
+- `GET /api/students/getAll` - 📋 Get all students
 - `POST /api/student/create` - ➕ Create new student
 - `GET /api/student/{id}/get` - 🔍 Get student by ID
 - `PUT /api/student/{id}/update` - ✏️ Update student
